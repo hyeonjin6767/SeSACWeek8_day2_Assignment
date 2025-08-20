@@ -14,6 +14,7 @@ class SimpleTableViewExerciseViewController: UIViewController {
 
     let tableView = {
         let tableView = UITableView()
+        tableView.keyboardDismissMode = .onDrag
         tableView.register(SimpleTableViewExampleTableViewCell.self, forCellReuseIdentifier: SimpleTableViewExampleTableViewCell.identifier)
         return tableView
     }()
@@ -37,13 +38,13 @@ class SimpleTableViewExerciseViewController: UIViewController {
         
         tableView.rx.modelSelected(String.self)
             .subscribe { value in
-                DefaultWireframe.presentAlert("Tapped '\(value)'")
+                //DefaultWireframe.presentAlert("Tapped '\(value)'")
             }
             .disposed(by: disposeBag)
 
         tableView.rx.itemAccessoryButtonTapped
             .subscribe(onNext: { indexPath in
-                DefaultWireframe.presentAlert("Tapped Detail @ \(indexPath.section),\(indexPath.row)")
+                //DefaultWireframe.presentAlert("악세사리 클릭? Tapped Detail @ \(indexPath.section),\(indexPath.row)")
                 print("악세사리 클릭?")
         })
             .disposed(by: disposeBag)

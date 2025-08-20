@@ -19,18 +19,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: scene)
         
         let tabBarController = UITabBarController()
+        let searchVC = HomeworkViewController()
+        searchVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 0)
         let tableVC = SimpleTableViewExerciseViewController()
-        tableVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 0)
+        tableVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 1)
         let numberVC = NumbersViewController()
-        numberVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 1)
+        numberVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 2)
         let validateVC = SimpleValidationViewController()
-        validateVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 2)
+        validateVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "heart"), tag: 3)
         
-        tabBarController.viewControllers = [tableVC, numberVC, validateVC]
+        tabBarController.viewControllers = [searchVC, tableVC, numberVC, validateVC]
         tabBarController.tabBar.tintColor = .black
         tabBarController.tabBar.unselectedItemTintColor = .lightGray
         
-        window?.rootViewController = UINavigationController(rootViewController: tabBarController)
+        window?.rootViewController = UINavigationController(rootViewController: HomeworkViewController())
         window?.makeKeyAndVisible()
         
     }
