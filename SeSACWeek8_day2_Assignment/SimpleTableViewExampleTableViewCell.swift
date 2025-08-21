@@ -20,7 +20,7 @@ class SimpleTableViewExampleTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        configure()
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -29,9 +29,9 @@ class SimpleTableViewExampleTableViewCell: UITableViewCell {
     
     private func configure() {
         contentView.addSubview(simpleTextLabel)
-        simpleTextLabel.snp.makeConstraints {
-            $0.edges.equalTo(contentView.safeAreaLayoutGuide)
-        }
+//        simpleTextLabel.snp.makeConstraints {
+//            $0.edges.equalTo(contentView.safeAreaLayoutGuide)
+//        }
 
     }
 

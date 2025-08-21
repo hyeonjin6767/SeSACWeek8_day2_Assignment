@@ -39,12 +39,14 @@ class SimpleTableViewExerciseViewController: UIViewController {
         tableView.rx.modelSelected(String.self)
             .subscribe { value in
                 //DefaultWireframe.presentAlert("Tapped '\(value)'")
+                self.showAlert(title: "Tapped '\(value)'", message: "", ok: "확인")
             }
             .disposed(by: disposeBag)
 
         tableView.rx.itemAccessoryButtonTapped
             .subscribe(onNext: { indexPath in
                 //DefaultWireframe.presentAlert("악세사리 클릭? Tapped Detail @ \(indexPath.section),\(indexPath.row)")
+                self.showAlert(title: "Tapped Detail @ \(indexPath.section),\(indexPath.row)", message: "", ok: "확인")
                 print("악세사리 클릭?")
         })
             .disposed(by: disposeBag)

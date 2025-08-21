@@ -43,50 +43,80 @@ class SimpleValidationViewController: UIViewController {
     let gray = Observable.just(UIColor.systemGray5)
     let green = Observable.just(UIColor.systemGreen)
 
+    let viewModel = ValidationViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        view.endEditing(true)
         
-        white.bind(to: view.rx.backgroundColor).disposed(by: disposeBag)
+        white
+            .bind(to: view.rx.backgroundColor)
+            .disposed(by: disposeBag)
+        
         gray
             .bind(to: usernameOutlet.rx.backgroundColor, passwordOutlet.rx.backgroundColor, doSomethingOutlet.rx.backgroundColor)
             .disposed(by: disposeBag)
-        green.bind(to: doSomethingOutlet.rx.backgroundColor).disposed(by: disposeBag)
+        
+        green
+            .bind(to: doSomethingOutlet.rx.backgroundColor)
+            .disposed(by: disposeBag)
         
         usernameValidOutlet.text = "Username has to be at least \(minimalUsernameLength) characters"
         passwordValidOutlet.text = "Password has to be at least \(minimalPasswordLength) characters"
 
-        let usernameValid = usernameOutlet.rx.text.orEmpty
-            .map { $0.count >= minimalUsernameLength }
-            .share(replay: 1)
+//        let usernameValid =
+//        usernameOutlet.rx.text.orEmpty
+//            .map { $0.count >= minimalUsernameLength }
+//            .share(replay: 1)
+//
+//        let passwordValid =
+//        passwordOutlet.rx.text.orEmpty
+//            .map { $0.count >= minimalPasswordLength }
+//            .share(replay: 1)
+//
+//        let everythingValid =
+//        Observable
+//            .combineLatest(usernameValid, passwordValid) { $0 && $1 }
+//            .share(replay: 1)
 
-        let passwordValid = passwordOutlet.rx.text.orEmpty
-            .map { $0.count >= minimalPasswordLength }
-            .share(replay: 1)
+//        usernameValid
+//            .bind(to: passwordOutlet.rx.isEnabled)
+//            .disposed(by: disposeBag)
 
-        let everythingValid = Observable.combineLatest(usernameValid, passwordValid) { $0 && $1 }
-            .share(replay: 1)
+//        usernameValid
+//            .bind(to: usernameValidOutlet.rx.isHidden)
+//            .disposed(by: disposeBag)
 
-        usernameValid
-            .bind(to: passwordOutlet.rx.isEnabled)
-            .disposed(by: disposeBag)
+//        passwordValid
+//            .bind(to: passwordValidOutlet.rx.isHidden)
+//            .disposed(by: disposeBag)
 
-        usernameValid
-            .bind(to: usernameValidOutlet.rx.isHidden)
-            .disposed(by: disposeBag)
-
-        passwordValid
-            .bind(to: passwordValidOutlet.rx.isHidden)
-            .disposed(by: disposeBag)
-
-        everythingValid
-            .bind(to: doSomethingOutlet.rx.isEnabled)
-            .disposed(by: disposeBag)
+//        everythingValid
+//            .bind(to: doSomethingOutlet.rx.isEnabled)
+//            .disposed(by: disposeBag)
 
         doSomethingOutlet.rx.tap
             .subscribe(onNext: { [weak self] _ in self?.showAlert() })
             .disposed(by: disposeBag)
+        
+        // 타입 확인용
+//        let a = usernameOutlet.rx.text.orEmpty
+//        let b = passwordOutlet.rx.text.orEmpty
+//        let c = doSomethingOutlet.rx.tap
+        
+        let input = ValidationViewModel.Input(getUsername: usernameOutlet.rx.text.orEmpty, getPassword: passwordOutlet.rx.text.orEmpty)
+        let output = viewModel.transform(input: input)
+        
+        output.usernameValidation
+            .bind(to: passwordOutlet.rx.isEnabled, usernameValidOutlet.rx.isHidden)
+            .disposed(by: disposeBag)
+        output.passwordValidation
+            .bind(to: passwordValidOutlet.rx.isHidden)
+            .disposed(by: disposeBag)
+        output.everythingValidation
+            .bind(to: doSomethingOutlet.rx.isHidden)
+            .disposed(by: disposeBag)
+        
     }
     
     func showAlert() {

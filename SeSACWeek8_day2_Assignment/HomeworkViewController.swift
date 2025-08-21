@@ -78,10 +78,10 @@ class HomeworkViewController: UIViewController {
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout())
     let searchBar = UISearchBar()
     
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
 //    lazy var tableItems = Observable.just(sampleUsers)
-    lazy var collectionItems = BehaviorSubject(value:[sampleUsers[0].name])
+    lazy var collectionItems: BehaviorSubject<[String]> = BehaviorSubject(value:[])
     lazy var tableItems = BehaviorSubject(value: sampleUsers)
 
     override func viewDidLoad() {
@@ -97,12 +97,22 @@ class HomeworkViewController: UIViewController {
                 let url = URL(string: element.profileImage)
                 cell.profileImageView.kf.setImage(with: url)
                 cell.usernameLabel.text = element.name
+                
+                cell.detailButton.rx.tap
+                    .bind(with: self) { owner, _ in
+                        print("더보기 클릭")
+                        let vc = SimpleTableViewExerciseViewController()
+                        owner.navigationController?.pushViewController(vc, animated: true)
+                    }
+                    .disposed(by: cell.disposeBag)
+                
             }
             .disposed(by: disposeBag)
         
         collectionItems
             .bind(to: collectionView.rx.items(cellIdentifier: UserCollectionViewCell.identifier, cellType: UserCollectionViewCell.self)) { (row, element, cell) in
-                cell.label.text = element
+                cell.label.text = String(element)
+                
             }
             .disposed(by: disposeBag)
         
@@ -148,12 +158,16 @@ class HomeworkViewController: UIViewController {
         view.addSubview(collectionView)
         view.addSubview(searchBar)
         
-        navigationItem.titleView = searchBar
+        //navigationItem.titleView = searchBar
+        
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()        }
          
         collectionView.register(UserCollectionViewCell.self, forCellWithReuseIdentifier: UserCollectionViewCell.identifier)
         collectionView.backgroundColor = .lightGray
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(searchBar.snp.bottom)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(50)
         }
@@ -163,7 +177,7 @@ class HomeworkViewController: UIViewController {
         tableView.rowHeight = 100
         tableView.keyboardDismissMode = .onDrag
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(50)
+            make.top.equalTo(collectionView.snp.bottom).offset(10)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }

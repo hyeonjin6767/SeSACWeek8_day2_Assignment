@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.tabBar.tintColor = .black
         tabBarController.tabBar.unselectedItemTintColor = .lightGray
         
-        window?.rootViewController = UINavigationController(rootViewController: HomeworkViewController())
+        window?.rootViewController = UINavigationController(rootViewController: tabBarController)
         window?.makeKeyAndVisible()
         
     }
